@@ -35,7 +35,7 @@ const app = {
         $('.paid').on('click', (e) => {
             let id = $(e.currentTarget).closest('.error').data('id');
             let paid = $('.paid').val();
-            
+
             $.ajaxSetup({
                headers: {
                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -50,7 +50,7 @@ const app = {
 
 
                   jQuery.ajax({
-                       url: "http://laravel.lcl/update",
+                       url: "https://handling.outofbeta.nl/update",
                        method: 'post',
                        data: {
                           id: id,
@@ -63,7 +63,7 @@ const app = {
 
             } else {
                 jQuery.ajax({
-                     url: "http://laravel.lcl/remove-paid",
+                     url: "https://handling.outofbeta.nl/remove-paid",
                      method: 'post',
                      data: {
                         id: id,
