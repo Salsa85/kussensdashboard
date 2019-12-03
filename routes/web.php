@@ -13,7 +13,7 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('dashboard');
 Route::get('/errors', 'AddError@index')->name('error');
 Route::get('/quotation', 'QuotationController@index')->name('quotation');
 

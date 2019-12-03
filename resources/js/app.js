@@ -44,22 +44,16 @@ const app = {
 
             if ($(e.currentTarget).prop('checked')) {
 
-
-                console.log(id);
-
-
-
-                  jQuery.ajax({
-                       url: "https://handling.outofbeta.nl/update",
-                       method: 'post',
-                       data: {
-                          id: id,
-                          paid: $('.paid').val(),
-                       },
-                       success: function(result){
-                          console.log(result);
-                       }});
-
+              jQuery.ajax({
+                   url: "https://handling.outofbeta.nl/update",
+                   method: 'post',
+                   data: {
+                      id: id,
+                      paid: $('.paid').val(),
+                   },
+                   success: function(result){
+                      console.log(result);
+                   }});
 
             } else {
                 jQuery.ajax({
@@ -74,18 +68,9 @@ const app = {
                      }});
             }
 
-
-
         });
     }
 }
 
 
-
 $(document).ready($.proxy(app.init, app));
-let data = {
-    items: [{
-
-    }]
-
-}
