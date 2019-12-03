@@ -1,0 +1,46 @@
+.page-errors {
+    background-color: #eee;
+    min-height: 100vh;
+    form {
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: .7rem 1rem;
+        }
+    }
+
+    .error__form {
+        @include make-col-ready();
+        @include make-col(4);
+
+
+        .form__wrapper {
+                background-color: #fff;
+                padding: 1rem;
+                margin-top: 1rem;
+        }
+    }
+    
+    .errors {
+        @include make-col-ready();
+        @include make-col(8);
+
+        padding: 1rem 2rem;
+
+        .error {
+            @include make-col-ready();
+            @include make-col(12);
+
+
+
+            div {
+                margin-right: 1rem;
+                padding: .7rem;
+
+            }
+        }
+    }
+}
