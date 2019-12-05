@@ -78,10 +78,10 @@
                     <label for="">Verkoop (ex) € <span class="sell"></span> </label>
                 </div>
                 <div class="">
-                    <label for="">btw: €<span class="btw"></span> </label>
+                    <label for="">btw: € <span class="btw"></span> </label>
                 </div>
                 <div class="">
-                    <label for="">incl btw: €<span class="incl"></span> </label>
+                    <label for="">incl btw: € <span class="incl"></span> </label>
                 </div>
             </div>
         </div>
