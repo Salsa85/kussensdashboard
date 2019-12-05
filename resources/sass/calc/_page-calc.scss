@@ -6,7 +6,7 @@
         @include make-col(8);
 
         form {
-    font-weight: bold;
+            font-weight: bold;
             label {
                 display: block;
 
@@ -43,6 +43,10 @@
 
                 &:not(span) {
                     font-weight: bold;
+                }
+
+                span {
+                    float: right;
                 }
             }
         }

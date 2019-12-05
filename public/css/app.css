@@ -11463,3 +11463,7 @@ a.text-dark:focus {
   font-weight: bold;
 }
 
+.page__calculator .results .totals label span {
+  float: right;
+}
+

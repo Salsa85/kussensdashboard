@@ -78,11 +78,9 @@ class CalculatorController extends Controller
         $fabricPrice = ($data['length'] + ($data['thickness'] * $scale)) / 100 * $data['fabric'];
         $fillingPrice = 186.06 * $data['length'] * $data['depth'] * $data['thickness'] / 1000000;
         $fabricPrice = $data['depth'] + 7 <= 70 ? $fabricPrice : $fabricPrice * 2;
-        // Check if filling is QDF and return extra price
-        $isQdf = $this->isQDF($data['filling']);
 
         // Check finish conditions and get price
-        $finishPrice = $this->between($data['length'], $data['finish']) + $isQdf;
+        $finishPrice = $this->between($data['length'], $data['finish']);
 
         // merga for ajax
         array_push($result, $fabricPrice, $fillingPrice, $finishPrice, $data['product']);
