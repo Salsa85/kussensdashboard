@@ -32,15 +32,17 @@ const app = {
 
     init () {
 
+        $.ajaxSetup({
+           headers: {
+               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+           }
+       });
+
         $('.paid').on('click', (e) => {
             let id = $(e.currentTarget).closest('.error').data('id');
             let paid = $('.paid').val();
 
-            $.ajaxSetup({
-               headers: {
-                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-               }
-           });
+
 
             if ($(e.currentTarget).prop('checked')) {
 
@@ -69,8 +71,37 @@ const app = {
             }
 
         });
+
+        $('body').on('click', '.calculate', (e) => {
+            e.preventDefault();
+
+            let data = {
+                uid:        $('select[name=products]').val(),
+                fabric:     $('select[name=fabrics]').val(),
+                filling:    $('select[name=fillings]').val(),
+                finish:     $('select[name=finishes]').val(),
+                length:     $('input[name=length]').val(),
+                depth:      $('input[name=depth]').val(),
+                thickness:  $('input[name=thickness]').val(),
+            }
+
+            //console.log(data);
+            jQuery.ajax({
+                 url: "https://handling.outofbeta.nl/get-price",
+                 method: 'post',
+                 data: data,
+                 success: function(result){
+                    console.log(result);
+                    $('.fabric__price label span').html( parseFloat(result[0]).toFixed(2));
+                    $('.filling__price label span').html(parseFloat(result[1]).toFixed(2));
+                    $('.finish__price label span').html(parseFloat(result[2]).toFixed(2));
+                    $('.buy').html( parseFloat(result[0] + result[1] + result[2]).toFixed(2));
+                    $('.sell').html( parseFloat((result[0] + result[1] + result[2]) * 1.4).toFixed(2));
+                    $('.btw').html( parseFloat((result[0] + result[1] + result[2]) / 100 * 21).toFixed(2));
+                    $('.incl').html( parseFloat(((result[0] + result[1] + result[2]) * 1.4)  * 1.21 ).toFixed(2));
+                 }});
+        });
     }
 }
-
 
 $(document).ready($.proxy(app.init, app));

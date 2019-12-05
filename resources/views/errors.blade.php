@@ -10,7 +10,7 @@
                     <label for="title">Fout type</label>
                     <select class="" name="title" required>
                         <option value="Productie fout">Productie </option>
-                        <option value="Verzend fout">Verzending </option>
+                        <option value="Verzending">Verzending </option>
                         <option value="Administratie fout">Administratie </option>
                     </select>
                     <label for="order">Ordernummer</label>

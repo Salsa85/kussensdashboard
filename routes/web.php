@@ -16,6 +16,12 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('dashboard');
 Route::get('/errors', 'AddError@index')->name('error');
 Route::get('/quotation', 'QuotationController@index')->name('quotation');
+Route::get('/calculator', 'CalculatorController@index')->name('calculator');
+
+// Set calculator end points
+//
+//
+Route::post('/get-price', 'CalculatorController@selectCalculation');
 
 Route::post('/add-error', 'AddError@store');
 Route::post('/update', 'AddError@updatePayment')->name('update');

@@ -4,24 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Error;
 use Illuminate\Http\Request;
-use App\Mail\errorOverview;
+use App\Mail\ErrorOverview;
 use Mail;
 
 class EmailController extends Controller
 {
     public function htmlEmail()
 {
-    $errors = Error::get();
-    $data = [
-        'name'      => 'Biggus Dickus',
-        'message'   => 'The life of brian',
-        'subject'   => 'Laravel Plain Email',
-        'from'      => 'info@local.com',
-        'from_name' => 'Laravel HTML Email',
-    ];
+    $errors = Error::where(['paid' => 0])->get();
 
-    Mail::to('info@zencule.com', 'Chappie')->send(new errorOverview($errors));
+    if ($errors->isNotEmpty()) {
+        Mail::to('info@termopol.nl')
+        ->bcc('info@kussens.nu')
+        ->send(new ErrorOverview($errors));
+        return "send";
 
-    return "HTML Email Sent. Check your inbox.";
+    } else {
+
+        return "Not send";
+    }
+
+
 }
 }

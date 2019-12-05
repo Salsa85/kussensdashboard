@@ -38,9 +38,15 @@
                             Errors
                         </a>
                     </li>
+                    <li>
                     <a class="navbar-brand" href="{{ url('/quotation') }}">
                         Offertes
                     </a>
+                    </li>
+                    <a class="navbar-brand" href="{{ url('/calculator') }}">
+                        Calculator
+                    </a>
+                    </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
