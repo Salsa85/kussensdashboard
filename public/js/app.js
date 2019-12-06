@@ -49531,7 +49531,7 @@ var app = {
     e.preventDefault();
     this.getData();
     jQuery.ajax({
-      url: "http://laravel.lcl/get-price",
+      url: "https://handling.outofbeta.nl/get-price",
       method: 'post',
       data: app.data,
       success: function success(result) {
