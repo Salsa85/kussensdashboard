@@ -34,11 +34,7 @@
                         @endforeach
                     </select>
 
-                    <select class="" name="fabrics">
-                        @foreach ( $fabric as $fabric_single )
-                            <option value="{{ $fabric_single['price'] }}"> {{ $fabric_single['name'] }}</option>
-                        @endforeach
-                    </select>
+
                 </div>
 
                 <div class="fillings">
