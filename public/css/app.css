@@ -11411,6 +11411,54 @@ a.text-dark:focus {
   padding: 0.7rem;
 }
 
+.page-quotation .reciever {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  -webkit-box-flex: 0;
+          flex: 0 0 50%;
+  max-width: 50%;
+}
+
+.page-quotation .reciever form fieldset {
+  margin-bottom: 1rem;
+}
+
+.page-quotation .reciever .company {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
+}
+
+.page-quotation .reciever .name,
+.page-quotation .reciever .contact,
+.page-quotation .reciever .address {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+          flex-direction: row;
+}
+
+.page-quotation .reciever .name label,
+.page-quotation .reciever .contact label,
+.page-quotation .reciever .address label {
+  margin: 1rem 0;
+}
+
+.page-quotation .add__products {
+  position: relative;
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  -webkit-box-flex: 0;
+          flex: 0 0 50%;
+  max-width: 50%;
+}
+
 .page__calculator {
   margin-top: 5rem;
 }
@@ -11465,5 +11513,9 @@ a.text-dark:focus {
 
 .page__calculator .results .totals label span {
   float: right;
+}
+
+.page__calculator .results .pillows .pillow-key {
+  color: red;
 }
 

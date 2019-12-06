@@ -29,6 +29,18 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 const app = {
+    marge: 1.4,
+    data: {
+        uid:        null,
+        fabric:     null,
+        filling:    null,
+        finish:     null,
+        length:     null,
+        depth:      null,
+        thickness:  null,
+    },
+    pillowNumber: 0,
+    pillows: [],
 
     init () {
 
@@ -37,6 +49,8 @@ const app = {
                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
            }
        });
+
+       $('body').on('click', '.calculate', $.proxy(this.getPrice, this));
 
         $('.paid').on('click', (e) => {
             let id = $(e.currentTarget).closest('.error').data('id');
@@ -72,35 +86,99 @@ const app = {
 
         });
 
-        $('body').on('click', '.calculate', (e) => {
-            e.preventDefault();
+    return this;
 
-            let data = {
-                uid:        $('select[name=products]').val(),
-                fabric:     $('select[name=fabrics]').val(),
-                filling:    $('select[name=fillings]').val(),
-                finish:     $('select[name=finishes]').val(),
-                length:     $('input[name=length]').val(),
-                depth:      $('input[name=depth]').val(),
-                thickness:  $('input[name=thickness]').val(),
-            }
+},
 
-            //console.log(data);
-            jQuery.ajax({
-                 url: "https://handling.outofbeta.nl/get-price",
-                 method: 'post',
-                 data: data,
-                 success: function(result){
-                    console.log(result);
-                    $('.fabric__price label span').html( parseFloat(result[0]).toFixed(2));
-                    $('.filling__price label span').html(parseFloat(result[1]).toFixed(2));
-                    $('.finish__price label span').html(parseFloat(result[2]).toFixed(2));
-                    $('.buy').html( parseFloat(result[0] + result[1] + result[2]).toFixed(2));
-                    $('.sell').html( parseFloat((result[0] + result[1] + result[2]) * 1.4).toFixed(2));
-                    $('.btw').html( parseFloat((result[0] + result[1] + result[2]) / 100 * 21).toFixed(2));
-                    $('.incl').html( parseFloat(((result[0] + result[1] + result[2]) * 1.4)  * 1.21 ).toFixed(2));
-                 }});
-        });
+    getData() {
+
+        /**
+         * Get input data
+         * @type {Object}
+         */
+        app.data = {
+            uid:        $('select[name=products]').val(),
+            fabric:     $('select[name=fabrics]').val(),
+            filling:    $('select[name=fillings]').val(),
+            finish:     $('select[name=finishes]').val(),
+            length:     $('input[name=length]').val(),
+            depth:      $('input[name=depth]').val(),
+            thickness:  $('input[name=thickness]').val(),
+        }
+
+    },
+
+    getPrice(e) {
+        e.preventDefault();
+
+        this.getData();
+
+        jQuery.ajax({
+             url: "http://laravel.lcl/get-price",
+             method: 'post',
+             data: app.data,
+             success: function(result){
+                $('.fabric__price label span').html( parseFloat(result[0]).toFixed(2));
+                $('.filling__price label span').html(parseFloat(result[1]).toFixed(2));
+                $('.finish__price label span').html(parseFloat(result[2]).toFixed(2));
+
+                $('.buy').html(app.getBuyPrice(result));
+                $('.sell').html(app.getSellPrice(result));
+                $('.btw').html( app.getTax(result));
+                $('.incl').html(app.getConsumerPrice(result));
+
+                result.push( $('.fabrics option:selected').text(), $('.fillings option:selected').text(), $('.finishes option:selected').text() );
+                app.pillows.push(result);
+                app.pillowNumber += 1;
+                $('.pillows').empty('');
+
+                console.log(app.pillows);
+
+                for (var i = 0; i < app.pillowNumber; i++) {
+                    $('.pillows').append(`
+                        <div class="pillow">
+                            <span class="pillow-key"> ${app.pillowNumber} </span>
+                            <span class="pillow-key"> ${app.pillows[i][3]} </span>
+                            <span class="pillow-key"> ${app.pillows[i][4]} </span>
+                            <span class="pillow-key"> ${app.pillows[i][5]} </span>
+                            <span class="pillow-key"> ${ app.getConsumerPrice(app.pillows[i])} </span>
+
+                        </div>
+
+                        `);
+                }
+
+             }});
+    },
+
+    getBuyPrice(result) {
+
+        let price = parseFloat(result[0] + result[1] + result[2]).toFixed(2);
+
+        return price;
+
+    },
+
+    getSellPrice(result) {
+
+        let price = parseFloat((result[0] + result[1] + result[2]) * app.marge).toFixed(2);
+
+        return price;
+
+    },
+
+    getTax(result) {
+
+        let price = parseFloat((result[0] + result[1] + result[2]) / 100 * 21).toFixed(2);
+
+        return price;
+    },
+
+    getConsumerPrice(result) {
+
+        let price = parseFloat(((result[0] + result[1] + result[2]) * 1.4)  * 1.21 ).toFixed(2)
+
+        return price;
     }
 }
 

@@ -30,7 +30,13 @@
                 <div class="fabrics">
                     <select class="" name="fabrics">
                         @foreach ( $fabrics as $fabric )
-                            <option value="{{ $fabric['price'] }}"> {{ $fabric['name'] }} {{ $fabric['price']}}</option>
+                            <option value="{{ $fabric['price'] }}"> {{ $fabric['name'] }}</option>
+                        @endforeach
+                    </select>
+
+                    <select class="" name="fabrics">
+                        @foreach ( $fabric as $fabric_single )
+                            <option value="{{ $fabric_single['price'] }}"> {{ $fabric_single['name'] }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -38,7 +44,7 @@
                 <div class="fillings">
                     <select class="" name="fillings">
                         @foreach ( $fillings as $filling )
-                            <option value="{{ $filling['price'] }}"> {{ $filling['name'] }} {{ $filling['price'] }}</option>
+                            <option value="{{ $filling['price'] }}"> {{ $filling['name'] }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -83,6 +89,9 @@
                 <div class="">
                     <label for="">incl btw: € <span class="incl"></span> </label>
                 </div>
+            </div>
+            <div class="pillows">
+
             </div>
         </div>
     </div>

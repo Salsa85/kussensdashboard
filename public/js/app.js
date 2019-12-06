@@ -49461,12 +49461,25 @@ Vue.component('example-component', __webpack_require__(/*! ./components/ExampleC
  */
 
 var app = {
+  marge: 1.4,
+  data: {
+    uid: null,
+    fabric: null,
+    filling: null,
+    finish: null,
+    length: null,
+    depth: null,
+    thickness: null
+  },
+  pillowNumber: 0,
+  pillows: [],
   init: function init() {
     jquery__WEBPACK_IMPORTED_MODULE_0___default.a.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': jquery__WEBPACK_IMPORTED_MODULE_0___default()('meta[name="csrf-token"]').attr('content')
       }
     });
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('body').on('click', '.calculate', jquery__WEBPACK_IMPORTED_MODULE_0___default.a.proxy(this.getPrice, this));
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('.paid').on('click', function (e) {
       var id = jquery__WEBPACK_IMPORTED_MODULE_0___default()(e.currentTarget).closest('.error').data('id');
       var paid = jquery__WEBPACK_IMPORTED_MODULE_0___default()('.paid').val();
@@ -49497,34 +49510,65 @@ var app = {
         });
       }
     });
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()('body').on('click', '.calculate', function (e) {
-      e.preventDefault();
-      var data = {
-        uid: jquery__WEBPACK_IMPORTED_MODULE_0___default()('select[name=products]').val(),
-        fabric: jquery__WEBPACK_IMPORTED_MODULE_0___default()('select[name=fabrics]').val(),
-        filling: jquery__WEBPACK_IMPORTED_MODULE_0___default()('select[name=fillings]').val(),
-        finish: jquery__WEBPACK_IMPORTED_MODULE_0___default()('select[name=finishes]').val(),
-        length: jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=length]').val(),
-        depth: jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=depth]').val(),
-        thickness: jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=thickness]').val()
-      }; //console.log(data);
+    return this;
+  },
+  getData: function getData() {
+    /**
+     * Get input data
+     * @type {Object}
+     */
+    app.data = {
+      uid: jquery__WEBPACK_IMPORTED_MODULE_0___default()('select[name=products]').val(),
+      fabric: jquery__WEBPACK_IMPORTED_MODULE_0___default()('select[name=fabrics]').val(),
+      filling: jquery__WEBPACK_IMPORTED_MODULE_0___default()('select[name=fillings]').val(),
+      finish: jquery__WEBPACK_IMPORTED_MODULE_0___default()('select[name=finishes]').val(),
+      length: jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=length]').val(),
+      depth: jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=depth]').val(),
+      thickness: jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name=thickness]').val()
+    };
+  },
+  getPrice: function getPrice(e) {
+    e.preventDefault();
+    this.getData();
+    jQuery.ajax({
+      url: "http://laravel.lcl/get-price",
+      method: 'post',
+      data: app.data,
+      success: function success(result) {
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.fabric__price label span').html(parseFloat(result[0]).toFixed(2));
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.filling__price label span').html(parseFloat(result[1]).toFixed(2));
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.finish__price label span').html(parseFloat(result[2]).toFixed(2));
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.buy').html(app.getBuyPrice(result));
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.sell').html(app.getSellPrice(result));
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.btw').html(app.getTax(result));
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.incl').html(app.getConsumerPrice(result));
+        result.push(jquery__WEBPACK_IMPORTED_MODULE_0___default()('.fabrics option:selected').text(), jquery__WEBPACK_IMPORTED_MODULE_0___default()('.fillings option:selected').text(), jquery__WEBPACK_IMPORTED_MODULE_0___default()('.finishes option:selected').text());
+        app.pillows.push(result);
+        app.pillowNumber += 1;
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.pillows').empty('');
+        console.log(app.pillows);
 
-      jQuery.ajax({
-        url: "https://handling.outofbeta.nl/get-price",
-        method: 'post',
-        data: data,
-        success: function success(result) {
-          console.log(result);
-          jquery__WEBPACK_IMPORTED_MODULE_0___default()('.fabric__price label span').html(parseFloat(result[0]).toFixed(2));
-          jquery__WEBPACK_IMPORTED_MODULE_0___default()('.filling__price label span').html(parseFloat(result[1]).toFixed(2));
-          jquery__WEBPACK_IMPORTED_MODULE_0___default()('.finish__price label span').html(parseFloat(result[2]).toFixed(2));
-          jquery__WEBPACK_IMPORTED_MODULE_0___default()('.buy').html(parseFloat(result[0] + result[1] + result[2]).toFixed(2));
-          jquery__WEBPACK_IMPORTED_MODULE_0___default()('.sell').html(parseFloat((result[0] + result[1] + result[2]) * 1.4).toFixed(2));
-          jquery__WEBPACK_IMPORTED_MODULE_0___default()('.btw').html(parseFloat((result[0] + result[1] + result[2]) / 100 * 21).toFixed(2));
-          jquery__WEBPACK_IMPORTED_MODULE_0___default()('.incl').html(parseFloat((result[0] + result[1] + result[2]) * 1.4 * 1.21).toFixed(2));
+        for (var i = 0; i < app.pillowNumber; i++) {
+          jquery__WEBPACK_IMPORTED_MODULE_0___default()('.pillows').append("\n                        <div class=\"pillow\">\n                            <span class=\"pillow-key\"> ".concat(app.pillowNumber, " </span>\n                            <span class=\"pillow-key\"> ").concat(app.pillows[i][3], " </span>\n                            <span class=\"pillow-key\"> ").concat(app.pillows[i][4], " </span>\n                            <span class=\"pillow-key\"> ").concat(app.pillows[i][5], " </span>\n                            <span class=\"pillow-key\"> ").concat(app.getConsumerPrice(app.pillows[i]), " </span>\n\n                        </div>\n\n                        "));
         }
-      });
+      }
     });
+  },
+  getBuyPrice: function getBuyPrice(result) {
+    var price = parseFloat(result[0] + result[1] + result[2]).toFixed(2);
+    return price;
+  },
+  getSellPrice: function getSellPrice(result) {
+    var price = parseFloat((result[0] + result[1] + result[2]) * app.marge).toFixed(2);
+    return price;
+  },
+  getTax: function getTax(result) {
+    var price = parseFloat((result[0] + result[1] + result[2]) / 100 * 21).toFixed(2);
+    return price;
+  },
+  getConsumerPrice: function getConsumerPrice(result) {
+    var price = parseFloat((result[0] + result[1] + result[2]) * 1.4 * 1.21).toFixed(2);
+    return price;
   }
 };
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).ready(jquery__WEBPACK_IMPORTED_MODULE_0___default.a.proxy(app.init, app));

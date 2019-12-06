@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class QuotationController extends Controller
 {
@@ -11,9 +12,14 @@ class QuotationController extends Controller
      *
      * @return void
      */
+
     public function __construct()
     {
-        $this->middleware('auth');
+        // Get data
+        $this->products = json_decode(Storage::get('/data/products.json'), true);
+        $this->fabrics = json_decode(Storage::get('/data/fabrics.json'), true);
+        $this->fillings = json_decode(Storage::get('/data/fillings.json'), true);
+        $this->finishes = json_decode(Storage::get('/data/finishes.json'), true);
     }
 
     /**
@@ -23,9 +29,14 @@ class QuotationController extends Controller
      */
     public function index()
     {
-    
 
-        return view('/quotation');
+        // Return to view
+        return view('/quotation', [
+            'products' => $this->products,
+            'fabrics' => $this->fabrics,
+            'fillings' => $this->fillings,
+            'finishes' => $this->finishes
+        ]);
 
     }
 }
